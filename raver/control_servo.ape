@@ -1,0 +1,63 @@
+#include <Servo.h>
+
+Servo servoV; 
+Servo servoH;
+
+void setup() {
+
+  pinMode(13,OUTPUT);
+  pinMode(12,OUTPUT);
+
+  servoH.attach(13); //analog pin 1
+  servoV.attach(12); //analog pin 1
+  
+  Serial.begin(9600);
+  
+  Serial.println("Ready???");
+  Serial.flush();
+  
+}
+
+void loop() {
+
+  static int v = 0;
+
+  static int s = 0;
+
+  if ( Serial.available()) {
+    Serial.flush();
+    char ch = Serial.read();
+    delay(15);
+    switch(ch) {
+      case '0'...'9':
+        v = v * 10 + ch - '0';
+        Serial.println("current value=");
+        Serial.println(v);
+        break;
+      case 'h':
+        servoH.write(v);
+        v = 0;
+        delay(2000);
+        break;
+      case 'v':
+        servoV.write(v);
+        v = 0;
+        delay(2000);
+        break;
+      case 'd':
+        servoH.detach();
+        break;
+      case 'a':
+        servoH.attach(13);
+        servoV.attach(12);
+        
+        break;
+    }
+  }
+
+  
+
+} 
+
+
+
